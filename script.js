@@ -3,7 +3,14 @@ const ctx = canvas.getContext("2d");
 
 const box = 20;
 let snake, food, score, d, game;
-let firstMove = false;  // To track if the snake has made its first mov
+let firstMove = false;  // To track if the snake has made its first move
+let timeBarInterval;  // Variable to store the interval ID for the time bar
+
+const foodTypes = [
+    { color: "#00AA00", points: 1, time: 15, shape: 'square', weight: 90 },  // Regular food
+    { color: "#DD0000", points: 3, time: 30, shape: 'circle', weight:  8},  // Bonus food
+    { color: "#0000DD", points: 5, time: 50, shape: 'triangle', weight: 2 } // Super food
+];
 
 document.addEventListener("keydown", direction);
 document.getElementById("restartButton").addEventListener("click", startGame);
@@ -13,23 +20,44 @@ function startGame() {
     snake = [];
     snake[0] = { x: 9 * box, y: 10 * box };
 
-    food = {
-        x: Math.floor(Math.random() * 19 + 1) * box,
-        y: Math.floor(Math.random() * 19 + 1) * box,
-    };
+    generateFood();
 
     score = 0;
     d = null;
-
+    firstMove = false;  // Reset the first move tracker
 
     timeBarWidth = 100; // Initialize time bar width to 100%
     timeDecreaseInterval = 100; // Decrease time bar by 1% every 100ms
-    timeIncreaseAmount = 15; // Increase time bar by 10% when food is eaten
 
     if (game) clearInterval(game);
     game = setInterval(draw, 100);
 
+    if (timeBarInterval) clearInterval(timeBarInterval);  // Clear the previous interval
+    timeBarInterval = null;  // Reset the interval ID
+
     document.getElementById("gameOverPopup").style.display = "none";
+    document.getElementById("joystickArrows").style.display = "block";  // Show arrows
+}
+
+function generateFood() {
+    const totalWeight = foodTypes.reduce((total, food) => total + food.weight, 0);
+    const randomWeight = Math.random() * totalWeight;
+    let weightSum = 0;
+    
+    for (const foodType of foodTypes) {
+        weightSum += foodType.weight;
+        if (randomWeight <= weightSum) {
+            food = {
+                x: Math.floor(Math.random() * 19 + 1) * box,
+                y: Math.floor(Math.random() * 19 + 1) * box,
+                color: foodType.color,
+                points: foodType.points,
+                time: foodType.time,
+                shape: foodType.shape
+            };
+            break;
+        }
+    }
 }
 
 function direction(event) {
@@ -37,7 +65,13 @@ function direction(event) {
     else if (event.keyCode === 38 && d !== "DOWN") d = "UP";
     else if (event.keyCode === 39 && d !== "LEFT") d = "RIGHT";
     else if (event.keyCode === 40 && d !== "UP") d = "DOWN";
-    if(!firstMove) {startDecreasingTimeBar(); firstMove = true}
+
+    if (!firstMove) {
+        startDecreasingTimeBar();
+        firstMove = true;
+        document.getElementById("joystickArrows").style.display = "none";  // Hide arrows
+    }
+
     if (d) {
         document.getElementById("joystickZone").classList.add('active');
     }
@@ -53,13 +87,9 @@ function moveSnake() {
     if (d === "DOWN") snakeY += box;
 
     if (snakeX === food.x && snakeY === food.y) {
-        score++;
-        food = {
-            x: Math.floor(Math.random() * 19 + 1) * box,
-            y: Math.floor(Math.random() * 19 + 1) * box,
-        };
-
-        increaseTimeBar();
+        score += food.points;
+        increaseTimeBar(food.time);
+        generateFood(); // Generate new food
 
     } else {
         snake.pop();
@@ -101,13 +131,32 @@ function draw() {
         ctx.strokeRect(snake[i].x, snake[i].y, box, box);
     }
 
-    ctx.fillStyle = "#00AA00";
-    ctx.fillRect(food.x, food.y, box, box);
-    ctx.strokeRect(food.x, food.y, box, box);
+    drawFood();
 
     document.getElementById("score").innerText = score;
 
     moveSnake();
+}
+
+function drawFood() {
+    ctx.fillStyle = food.color;
+    if (food.shape === 'circle') {
+        ctx.beginPath();
+        ctx.arc(food.x + box / 2, food.y + box / 2, box / 2, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.stroke();
+    } else if (food.shape === 'square') {
+        ctx.fillRect(food.x, food.y, box, box);
+        ctx.strokeRect(food.x, food.y, box, box);
+    } else if (food.shape === 'triangle') {
+        ctx.beginPath();
+        ctx.moveTo(food.x + box / 2, food.y);
+        ctx.lineTo(food.x + box, food.y + box);
+        ctx.lineTo(food.x, food.y + box);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+    }
 }
 
 function shareScore() {
@@ -138,23 +187,24 @@ function shareScore() {
 
 function startDecreasingTimeBar() {
     const timeBar = document.getElementById("timeBar");
-    setInterval(() => {
+    if (timeBarInterval) clearInterval(timeBarInterval);  // Clear any existing interval
+    timeBarInterval = setInterval(() => {
         if (timeBarWidth > 0) {
             timeBarWidth -= 1;
             timeBar.style.width = timeBarWidth + "%";
         } else {
             clearInterval(game);
+            clearInterval(timeBarInterval);
             document.getElementById("finalScore").innerText = score;
             document.getElementById("gameOverPopup").style.display = "flex";
         }
     }, timeDecreaseInterval);
 }
 
-function increaseTimeBar() {
-    timeBarWidth = Math.min(timeBarWidth + timeIncreaseAmount, 100);
+function increaseTimeBar(time) {
+    timeBarWidth = Math.min(timeBarWidth + time, 100);
     document.getElementById("timeBar").style.width = timeBarWidth + "%";
 }
-
 
 startGame();
 
@@ -175,7 +225,13 @@ joystick.on('move', (evt, data) => {
         else if (degree >= 135 && degree < 225 && d !== "LEFT") d = "LEFT";
         else if (degree >= 225 && degree < 315 && d !== "DOWN") d = "DOWN";
         else if ((degree >= 315 || degree < 45) && d !== "RIGHT") d = "RIGHT";
+
+        if (!firstMove) {
+            startDecreasingTimeBar();
+            firstMove = true;
+            document.getElementById("joystickArrows").style.display = "none";  // Hide arrows
+        }
+
         document.getElementById("joystickZone").classList.add('active');
-        if(!firstMove) {startDecreasingTimeBar(); firstMove = true}
     }
 });

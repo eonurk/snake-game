@@ -66,6 +66,22 @@ button:hover {
     background-color: #e0a800;
 }
 
+
+#timeBarContainer {
+    width: 100%;
+    max-width: 400px;
+    height: 20px;
+    background-color: #333;
+    margin-bottom: 10px;
+}
+
+#timeBar {
+    width: 100%;
+    height: 100%;
+    background-color: #00AA00;
+    transition: width 0.1s linear;
+}
+
 #joystickZone {
     position: fixed;
     bottom: 20px;
@@ -73,7 +89,7 @@ button:hover {
     transform: translateX(-50%);
     width: 100px;
     height: 100px;
-    animation: breathing 1.5s infinite;
+    animation: breathing 1.2s infinite;
 }
 
 #joystickZone.active {
@@ -92,7 +108,6 @@ button:hover {
     #joystickZone {
         width: 80px;
         height: 80px;
-        bottom: 10px;
     }
 }
 
@@ -101,7 +116,7 @@ button:hover {
         transform: translateX(-50%) scale(1);
     }
     50% {
-        transform: translateX(-50%) scale(1.2);
+        transform: translateX(-50%) scale(1.5);
     }
     100% {
         transform: translateX(-50%) scale(1);

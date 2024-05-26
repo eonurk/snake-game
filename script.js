@@ -20,10 +20,16 @@ function startGame() {
     score = 0;
     d = null;
 
+
+    timeBarWidth = 100; // Initialize time bar width to 100%
+    timeDecreaseInterval = 150; // Decrease time bar by 1% every 100ms
+    timeIncreaseAmount = 15; // Increase time bar by 10% when food is eaten
+
     if (game) clearInterval(game);
     game = setInterval(draw, 100);
 
     document.getElementById("gameOverPopup").style.display = "none";
+    startDecreasingTimeBar();
 }
 
 function direction(event) {
@@ -52,6 +58,9 @@ function moveSnake() {
             x: Math.floor(Math.random() * 19 + 1) * box,
             y: Math.floor(Math.random() * 19 + 1) * box,
         };
+
+        increaseTimeBar();
+
     } else {
         snake.pop();
     }
@@ -127,6 +136,26 @@ function shareScore() {
     }
 }
 
+function startDecreasingTimeBar() {
+    const timeBar = document.getElementById("timeBar");
+    setInterval(() => {
+        if (timeBarWidth > 0) {
+            timeBarWidth -= 1;
+            timeBar.style.width = timeBarWidth + "%";
+        } else {
+            clearInterval(game);
+            document.getElementById("finalScore").innerText = score;
+            document.getElementById("gameOverPopup").style.display = "flex";
+        }
+    }, timeDecreaseInterval);
+}
+
+function increaseTimeBar() {
+    timeBarWidth = Math.min(timeBarWidth + timeIncreaseAmount, 100);
+    document.getElementById("timeBar").style.width = timeBarWidth + "%";
+}
+
+
 startGame();
 
 // Virtual joystick controls
@@ -135,7 +164,7 @@ const joystick = nipplejs.create({
     mode: 'static',
     position: { left: '50%', bottom: '50px' },
     color: '#FFF',
-    size: 100
+    size: 60
 });
 
 joystick.on('move', (evt, data) => {

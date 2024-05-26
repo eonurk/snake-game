@@ -3,6 +3,7 @@ const ctx = canvas.getContext("2d");
 
 const box = 20;
 let snake, food, score, d, game;
+let firstMove = false;  // To track if the snake has made its first mov
 
 document.addEventListener("keydown", direction);
 document.getElementById("restartButton").addEventListener("click", startGame);
@@ -22,14 +23,13 @@ function startGame() {
 
 
     timeBarWidth = 100; // Initialize time bar width to 100%
-    timeDecreaseInterval = 150; // Decrease time bar by 1% every 100ms
+    timeDecreaseInterval = 100; // Decrease time bar by 1% every 100ms
     timeIncreaseAmount = 15; // Increase time bar by 10% when food is eaten
 
     if (game) clearInterval(game);
     game = setInterval(draw, 100);
 
     document.getElementById("gameOverPopup").style.display = "none";
-    startDecreasingTimeBar();
 }
 
 function direction(event) {
@@ -37,7 +37,7 @@ function direction(event) {
     else if (event.keyCode === 38 && d !== "DOWN") d = "UP";
     else if (event.keyCode === 39 && d !== "LEFT") d = "RIGHT";
     else if (event.keyCode === 40 && d !== "UP") d = "DOWN";
-
+    if(!firstMove) {startDecreasingTimeBar(); firstMove = true}
     if (d) {
         document.getElementById("joystickZone").classList.add('active');
     }
@@ -176,5 +176,6 @@ joystick.on('move', (evt, data) => {
         else if (degree >= 225 && degree < 315 && d !== "DOWN") d = "DOWN";
         else if ((degree >= 315 || degree < 45) && d !== "RIGHT") d = "RIGHT";
         document.getElementById("joystickZone").classList.add('active');
+        if(!firstMove) {startDecreasingTimeBar(); firstMove = true}
     }
 });

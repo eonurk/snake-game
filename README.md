@@ -16,3 +16,7 @@ A simple Snake game built with HTML, CSS, and JavaScript.
 2. On mobile devices, use the virtual joystick to control the snake.
 3. Eat the green food to grow the snake and increase your score.
 4. Avoid running into the walls or the snake's own body.
+
+## Live Demo
+
+Play the game [here](https://eonurk.github.io/snake-game).

@@ -209,71 +209,54 @@ function increaseTimeBar(time) {
     document.getElementById("timeBar").style.width = timeBarWidth + "%";
 }
 
-
 const API_BASE_URL = 'https://snake-game-git-main-eonurks-projects.vercel.app'; // Replace with your actual Vercel custom domain
 
 async function saveScore(player, score) {
     try {
-        await axios.post(`${API_BASE_URL}/api/scores`, { player, score });
-        return { player, score };
+        const response = await axios.post(`${API_BASE_URL}/api/scores`, { player, score });
+        return response.data; // Return the saved score data
     } catch (error) {
         console.error("Error saving score:", error);
         return null;
     }
 }
 
-async function displayHighScores(currentPlayerScore = null) {
+function displayHighScores(highScores, currentPlayerScore = null) {
     const highScoresTable = document.getElementById("highScoresTable").getElementsByTagName('tbody')[0];
     highScoresTable.innerHTML = '';
 
-    try {
-        const response = await axios.get(`${API_BASE_URL}/api/scores`);
-        const highScores = response.data;
-        highScores.forEach((score, index) => {
-            const row = highScoresTable.insertRow();
-            const cellRank = row.insertCell(0);
-            const cellPlayer = row.insertCell(1);
-            const cellScore = row.insertCell(2);
+    highScores.forEach((score, index) => {
+        const row = highScoresTable.insertRow();
+        const cellRank = row.insertCell(0);
+        const cellPlayer = row.insertCell(1);
+        const cellScore = row.insertCell(2);
 
-            cellRank.innerText = index + 1;
-            cellPlayer.innerText = score.player;
-            cellScore.innerText = score.score;
+        cellRank.innerText = index + 1;
+        cellPlayer.innerText = score.player;
+        cellScore.innerText = score.score;
 
-            // Highlight the player's current score
-            if (currentPlayerScore && score.player === currentPlayerScore.player && score.score === currentPlayerScore.score) {
-                row.classList.add('highlight');
-            }
-        });
-    } catch (error) {
-        console.error("Error fetching high scores:", error);
-        alert(`Error fetching high scores: ${error.message}`);
-    }
-}
-
-function getDomain() {
-    return window.location.hostname;
+        // Highlight the player's current score
+        if (currentPlayerScore && score.player === currentPlayerScore.player && score.score === currentPlayerScore.score) {
+            row.classList.add('highlight');
+        }
+    });
 }
 
 async function checkAndSaveScore(score) {
     try {
-        const allowedDomains = ["https://snake-game-git-main-eonurks-projects.vercel.app", "https://eonurk.github.io"];
-        const currentDomain = getDomain();
-
-        // Proceed only if the current domain is in the allowed list
-        if (!allowedDomains.includes(currentDomain)) {
-            return;
-        }
-
         const response = await axios.get(`${API_BASE_URL}/api/scores`);
         const highScores = response.data;
         if (highScores.length < 10 || score > highScores[highScores.length - 1].score) {
             const player = prompt("Enter your name:");
             if (player) {
-                await saveScore(player, score);
-                displayHighScores({ player, score }); // Display high scores and highlight current player's score
+                const savedScore = await saveScore(player, score);
+                if (savedScore) {
+                    const updatedScores = await axios.get(`${API_BASE_URL}/api/scores`);
+                    displayHighScores(updatedScores.data, savedScore); // Display high scores and highlight current player's score
+                }
             }
         } else {
-            displayHighScores();
+            displayHighScores(highScores);
         }
     } catch (error) {
         console.error("Error fetching high scores:", error);

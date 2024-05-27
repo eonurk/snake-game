@@ -6,7 +6,7 @@ let client = null;
 
 // Initialize the cors middleware
 const cors = Cors({
-  origin: 'https://eonurk.github.io/snake-game', // Allow requests from your GitHub Pages URL
+  origin: 'https://eonurk.github.io/', // Allow requests from your GitHub Pages URL
   methods: ['GET', 'POST'], // Allow only GET and POST methods
   allowedHeaders: ['Content-Type'], // Allow Content-Type header
 });

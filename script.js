@@ -7,9 +7,9 @@ let firstMove = false;  // To track if the snake has made its first move
 let timeBarInterval;  // Variable to store the interval ID for the time bar
 
 const foodTypes = [
-    { color: "#00AA00", points: 1, time: 15, shape: 'square', weight: 90 },  // Regular food
-    { color: "#DD0000", points: 3, time: 30, shape: 'circle', weight: 8 },   // Bonus food
-    { color: "#0000DD", points: 5, time: 50, shape: 'triangle', weight: 2 }  // Super food
+    { color: "#00AA00", points: 1, time: 15, shape: 'square', weight: 85 },  // Regular food
+    { color: "#DD0000", points: 3, time: 30, shape: 'circle', weight: 10 },   // Bonus food
+    { color: "#0000DD", points: 5, time: 50, shape: 'triangle', weight: 5 }  // Super food
 ];
 
 document.addEventListener("keydown", direction);

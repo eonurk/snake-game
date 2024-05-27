@@ -1,27 +1,3 @@
-@keyframes breathing {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.2);
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-
-@keyframes breathing-arrow {
-    0% {
-        transform: scale(0.9);
-    }
-    50% {
-        transform: scale(1);
-    }
-    100% {
-        transform: scale(0.9);
-    }
-}
-
 body {
     display: flex;
     flex-direction: column;
@@ -76,11 +52,17 @@ table {
 }
 
 button {
+    background-color: #ffc107;
+    border: none;
+    color: #333;
+    padding: 10px 20px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
+    font-size: 16px;
     margin: 4px;
     cursor: pointer;
+    border-radius: 5px;
 }
 
 button:hover {
@@ -106,33 +88,6 @@ button:hover {
     transition: width 0.1s linear;
 }
 
-@media (max-width: 400px) {
-    canvas {
-        width: 100%;
-        height: auto;
-    }
-    button {
-        font-size: 14px;
-    }
-    
-    .arrow.up {
-        border-width: 0 8px 16px 8px;
-    }
-    .arrow.down {
-        border-width: 16px 8px 0 8px;
-    }
-    .arrow.left {
-        border-width: 8px 16px 8px 0;
-    }
-    .arrow.right {
-        border-width: 8px 0 8px 16px;
-    }
-}
-
-.highlight {
-    color: #ffff00;              /* Black text color */
-}
-
 #controls {
     position: absolute;
     bottom: 20px;
@@ -140,7 +95,7 @@ button:hover {
     transform: translateX(-50%);
     display: grid;
     grid-template-areas:
-        "up"
+        "up up up"
         "left down right";
     grid-gap: 10px;
 }
@@ -172,4 +127,24 @@ button:hover {
     cursor: pointer;
     box-shadow: 0 4px #3e8e41;
     margin: 0 5px;
+}
+
+.control-button:active {
+    box-shadow: 0 2px #666;
+    transform: translateY(2px);
+}
+
+@media (max-width: 400px) {
+    canvas {
+        width: 100%;
+        height: auto;
+    }
+    button {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}
+
+.highlight {
+    color: #ffff00; /* Black text color */
 }

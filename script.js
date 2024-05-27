@@ -209,9 +209,11 @@ function increaseTimeBar(time) {
     document.getElementById("timeBar").style.width = timeBarWidth + "%";
 }
 
+const API_BASE_URL = 'https://snake-game-git-main-eonurks-projects.vercel.app/'; // Replace with your actual deployment URL
+
 async function saveScore(player, score) {
     try {
-        const response = await axios.post('/api/scores', { player, score });
+        const response = await axios.post(`${API_BASE_URL}/api/scores`, { player, score });
         return response.data; // Return the saved score data
     } catch (error) {
         console.error("Error saving score:", error);
@@ -219,7 +221,7 @@ async function saveScore(player, score) {
     }
 }
 
-function displayHighScores(highScores, currentPlayerScore = null) {
+async function displayHighScores(highScores, currentPlayerScore = null) {
     const highScoresTable = document.getElementById("highScoresTable").getElementsByTagName('tbody')[0];
     highScoresTable.innerHTML = '';
 
@@ -242,14 +244,14 @@ function displayHighScores(highScores, currentPlayerScore = null) {
 
 async function checkAndSaveScore(score) {
     try {
-        const response = await axios.get('/api/scores');
+        const response = await axios.get(`${API_BASE_URL}/api/scores`);
         const highScores = response.data;
         if (highScores.length < 10 || score > highScores[highScores.length - 1].score) {
             const player = prompt("Enter your name:");
             if (player) {
                 const savedScore = await saveScore(player, score);
                 if (savedScore) {
-                    const updatedScores = await axios.get('/api/scores');
+                    const updatedScores = await axios.get(`${API_BASE_URL}/api/scores`);
                     displayHighScores(updatedScores.data, savedScore); // Display high scores and highlight current player's score
                 }
             }

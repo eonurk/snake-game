@@ -15,6 +15,10 @@ const foodTypes = [
 document.addEventListener("keydown", direction);
 document.getElementById("restartButton").addEventListener("click", startGame);
 document.getElementById("shareButton").addEventListener("click", shareScore);
+document.getElementById('up').addEventListener('click', () => changeDirection('UP'));
+document.getElementById('left').addEventListener('click', () => changeDirection('LEFT'));
+document.getElementById('down').addEventListener('click', () => changeDirection('DOWN'));
+document.getElementById('right').addEventListener('click', () => changeDirection('RIGHT'));
 
 function startGame() {
     snake = [];
@@ -65,6 +69,23 @@ function direction(event) {
     else if (event.keyCode === 38 && d !== "DOWN") d = "UP";
     else if (event.keyCode === 39 && d !== "LEFT") d = "RIGHT";
     else if (event.keyCode === 40 && d !== "UP") d = "DOWN";
+
+    if (!firstMove) {
+        startDecreasingTimeBar();
+        firstMove = true;
+        document.getElementById("joystickArrows").style.display = "none";  // Hide arrows
+    }
+
+    if (d) {
+        document.getElementById("joystickZone").classList.add('active');
+    }
+}
+
+function changeDirection(newDirection) {
+    if (newDirection === "LEFT" && d !== "RIGHT") d = "LEFT";
+    else if (newDirection === "UP" && d !== "DOWN") d = "UP";
+    else if (newDirection === "RIGHT" && d !== "LEFT") d = "RIGHT";
+    else if (newDirection === "DOWN" && d !== "UP") d = "DOWN";
 
     if (!firstMove) {
         startDecreasingTimeBar();
@@ -264,31 +285,3 @@ async function checkAndSaveScore(score) {
 }
 
 startGame();
-
-// Virtual joystick controls
-const joystick = nipplejs.create({
-    zone: document.getElementById('joystickZone'),
-    mode: 'static',
-    position: { left: '50%', bottom: '50px' },
-    color: '#FFF',
-    size: 60
-});
-
-joystick.on('move', (evt, data) => {
-    const { angle } = data;
-    if (angle) {
-        const { degree } = angle;
-        if (degree >= 45 && degree < 135 && d !== "UP") d = "UP";
-        else if (degree >= 135 && degree < 225 && d !== "LEFT") d = "LEFT";
-        else if (degree >= 225 && degree < 315 && d !== "DOWN") d = "DOWN";
-        else if ((degree >= 315 || degree < 45) && d !== "RIGHT") d = "RIGHT";
-
-        if (!firstMove) {
-            startDecreasingTimeBar();
-            firstMove = true;
-            document.getElementById("joystickArrows").style.display = "none";  // Hide arrows
-        }
-
-        document.getElementById("joystickZone").classList.add('active');
-    }
-});

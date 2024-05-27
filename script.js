@@ -209,8 +209,6 @@ function increaseTimeBar(time) {
     document.getElementById("timeBar").style.width = timeBarWidth + "%";
 }
 
-const API_BASE_URL = 'https://snake-game-git-main-eonurks-projects.vercel.app'; // Replace with your actual Vercel custom domain
-
 async function saveScore(player, score) {
     try {
         const response = await axios.post('/api/scores', { player, score });

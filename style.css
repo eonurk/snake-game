@@ -76,17 +76,11 @@ table {
 }
 
 button {
-    background-color: #ffc107;
-    border: none;
-    color: #333;
-    padding: 10px 20px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
     margin: 4px;
     cursor: pointer;
-    border-radius: 5px;
 }
 
 button:hover {
@@ -112,125 +106,12 @@ button:hover {
     transition: width 0.1s linear;
 }
 
-#joystickZone {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 100px;
-}
-
-#joystick {
-    width: 100%;
-    height: 100%;
-    animation: breathing 1.2s infinite;
-}
-
-#joystickZone.active #joystick {
-    animation: none;
-}
-
-.joystick-arrows {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    animation: breathing-arrow 1.2s infinite;
-    z-index: 100;  /* Ensure arrows are on top */
-}
-
-.arrow {
-    position: absolute;
-    width: 0;
-    height: 0;
-    border-style: solid;
-}
-
-.arrow.up {
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 0 10px 20px 10px;
-    border-color: transparent transparent #FFF transparent;
-}
-
-.arrow.down {
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 20px 10px 0 10px;
-    border-color: #FFF transparent transparent transparent;
-}
-
-.arrow.left {
-    left: -10px;
-    top: 50%;
-    transform: translateY(-50%);
-    border-width: 10px 20px 10px 0;
-    border-color: transparent #FFF transparent transparent;
-}
-
-.arrow.right {
-    right: -10px;
-    top: 50%;
-    transform: translateY(-50%);
-    border-width: 10px 0 10px 20px;
-    border-color: transparent transparent transparent #FFF;
-}
-
-#controls {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.control-row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 5px 0;
-}
-
-#up {
-    margin-bottom: 10px;
-}
-
-#down {
-    margin-top: 10px;
-}
-
-.control-button {
-    width: 60px;
-    height: 60px;
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    box-shadow: 0 4px #3e8e41;
-    margin: 0 5px;
-}
-
-.control-button:active {
-    box-shadow: 0 2px #666;
-    transform: translateY(2px);
-}
-
 @media (max-width: 400px) {
     canvas {
         width: 100%;
         height: auto;
     }
     button {
-        padding: 8px 16px;
         font-size: 14px;
     }
     
@@ -250,4 +131,45 @@ button:hover {
 
 .highlight {
     color: #ffff00;              /* Black text color */
+}
+
+#controls {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: grid;
+    grid-template-areas:
+        "up"
+        "left down right";
+    grid-gap: 10px;
+}
+
+#up {
+    grid-area: up;
+}
+
+#left {
+    grid-area: left;
+}
+
+#down {
+    grid-area: down;
+}
+
+#right {
+    grid-area: right;
+}
+
+.control-button {
+    width: 60px;
+    height: 60px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px #3e8e41;
+    margin: 0 5px;
 }

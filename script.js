@@ -8,8 +8,8 @@ let timeBarInterval;  // Variable to store the interval ID for the time bar
 
 const foodTypes = [
     { color: "#00AA00", points: 1, time: 15, shape: 'square', weight: 90 },  // Regular food
-    { color: "#DD0000", points: 3, time: 30, shape: 'circle', weight:  8},  // Bonus food
-    { color: "#0000DD", points: 5, time: 50, shape: 'triangle', weight: 2 } // Super food
+    { color: "#DD0000", points: 3, time: 30, shape: 'circle', weight: 8 },   // Bonus food
+    { color: "#0000DD", points: 5, time: 50, shape: 'triangle', weight: 2 }  // Super food
 ];
 
 document.addEventListener("keydown", direction);
@@ -77,7 +77,8 @@ function direction(event) {
     }
 }
 
-function moveSnake() {
+
+async function moveSnake() {
     let snakeX = snake[0].x;
     let snakeY = snake[0].y;
 
@@ -105,6 +106,12 @@ function moveSnake() {
     if (collision(newHead, snake)) {
         clearInterval(game);
         document.getElementById("finalScore").innerText = score;
+        const currentPlayerScore = await saveScore(score); // Save the score and get the player/score object
+        if (currentPlayerScore) {
+            displayHighScores(currentPlayerScore); // Display high scores and highlight current player's score
+        } else {
+            displayHighScores();
+        }
         document.getElementById("gameOverPopup").style.display = "flex";
     }
 
@@ -204,6 +211,47 @@ function startDecreasingTimeBar() {
 function increaseTimeBar(time) {
     timeBarWidth = Math.min(timeBarWidth + time, 100);
     document.getElementById("timeBar").style.width = timeBarWidth + "%";
+}
+
+async function saveScore(score) {
+    const player = prompt("Enter your name:");
+    if (!player) return;
+
+    try {
+        await axios.post('/api/scores', { player, score });
+        return { player, score };
+    } catch (error) {
+        console.error("Error saving score:", error);
+        return null;
+    }
+}
+
+async function displayHighScores(currentPlayerScore = null) {
+    const highScoresTable = document.getElementById("highScoresTable").getElementsByTagName('tbody')[0];
+    highScoresTable.innerHTML = '';
+
+    try {
+        const response = await axios.get('/api/scores');
+        const highScores = response.data;
+        highScores.forEach((score, index) => {
+            const row = highScoresTable.insertRow();
+            const cellRank = row.insertCell(0);
+            const cellPlayer = row.insertCell(1);
+            const cellScore = row.insertCell(2);
+
+            cellRank.innerText = index + 1;
+            cellPlayer.innerText = score.player;
+            cellScore.innerText = score.score;
+
+            // Highlight the player's current score
+            if (currentPlayerScore && score.player === currentPlayerScore.player && score.score === currentPlayerScore.score) {
+                row.classList.add('highlight');
+            }
+        });
+    } catch (error) {
+        console.error("Error fetching high scores:", error);
+        alert(`Error fetching high scores: ${error.message}`);
+    }
 }
 
 startGame();

@@ -6,6 +6,7 @@
     <title>Snake Game</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.8.7/nipplejs.min.js"></script>
 </head>
 <body>
@@ -27,15 +28,28 @@
     </div>
     
 
-
     <div id="gameOverPopup" class="popup">
         <div class="popup-content">
             <h2>Game Over</h2>
             <p>Your Score: <span id="finalScore"></span></p>
-            <button id="shareButton">Share</button>
             <button id="restartButton">New Game</button>
+            <button id="shareButton">Share</button>
+            <h3>Global Top 10</h3>
+            <table id="highScoresTable">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Player</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Top 10 scores will be inserted here -->
+                </tbody>
+            </table>
         </div>
     </div>
+    
 
     <script src="script.js"></script>
 </body>

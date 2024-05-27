@@ -71,6 +71,10 @@ body {
     text-align: center;
 }
 
+table {
+    margin: 0 auto; /* Center the table horizontally */
+}
+
 button {
     background-color: #ffc107;
     border: none;
@@ -199,4 +203,8 @@ button:hover {
     .arrow.right {
         border-width: 8px 0 8px 16px;
     }
+}
+
+.highlight {
+    color: #ffff00;              /* Black text color */
 }

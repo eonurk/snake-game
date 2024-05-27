@@ -244,7 +244,7 @@ function displayHighScores(highScores, currentPlayerScore = null) {
 
 async function checkAndSaveScore(score) {
     try {
-        const response = await axios.get(`${API_BASE_URL}/api/scores`);
+        const response = await axios.get('/api/scores');
         const highScores = response.data;
         if (highScores.length < 10 || score > highScores[highScores.length - 1].score) {
             const player = prompt("Enter your name:");

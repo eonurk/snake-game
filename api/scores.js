@@ -1,7 +1,28 @@
 import { MongoClient, ServerApiVersion } from 'mongodb';
+import Cors from 'cors';
 
 const uri = process.env.MONGODB_URI;
 let client = null;
+
+// Initialize the cors middleware
+const cors = Cors({
+  origin: 'https://eonurk.github.io', // Allow requests from your game URL
+  methods: ['GET', 'POST'], // Allow only GET and POST methods
+  allowedHeaders: ['Content-Type'], // Allow Content-Type header
+});
+
+// Helper method to wait for a middleware to execute before continuing
+// And to throw an error when an error happens in a middleware
+function runMiddleware(req, res, fn) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+      return resolve(result);
+    });
+  });
+}
 
 async function connectToDatabase() {
   if (!client) {
@@ -24,6 +45,9 @@ async function connectToDatabase() {
 }
 
 export default async function handler(req, res) {
+  // Run the middleware
+  await runMiddleware(req, res, cors);
+
   const db = await connectToDatabase();
   const scoresCollection = db.collection('scores');
 

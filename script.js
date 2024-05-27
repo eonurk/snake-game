@@ -30,7 +30,7 @@ function startGame() {
     timeDecreaseInterval = 100; // Decrease time bar by 1% every 100ms
 
     if (game) clearInterval(game);
-    game = setInterval(draw, 100);
+    game = setInterval(draw, 200);
 
     if (timeBarInterval) clearInterval(timeBarInterval);  // Clear the previous interval
     timeBarInterval = null;  // Reset the interval ID

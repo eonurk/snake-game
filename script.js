@@ -213,7 +213,7 @@ const API_BASE_URL = 'https://snake-game-git-main-eonurks-projects.vercel.app'; 
 
 async function saveScore(player, score) {
     try {
-        const response = await axios.post(`${API_BASE_URL}/api/scores`, { player, score });
+        const response = await axios.post('/api/scores', { player, score });
         return response.data; // Return the saved score data
     } catch (error) {
         console.error("Error saving score:", error);
@@ -251,7 +251,7 @@ async function checkAndSaveScore(score) {
             if (player) {
                 const savedScore = await saveScore(player, score);
                 if (savedScore) {
-                    const updatedScores = await axios.get(`${API_BASE_URL}/api/scores`);
+                    const updatedScores = await axios.get('/api/scores');
                     displayHighScores(updatedScores.data, savedScore); // Display high scores and highlight current player's score
                 }
             }

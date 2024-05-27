@@ -181,6 +181,45 @@ button:hover {
     border-color: transparent transparent transparent #FFF;
 }
 
+#controls {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.control-row {
+    display: flex;
+    justify-content: center;
+    margin: 5px 0;
+}
+
+.control-row:nth-child(1) {
+    margin-bottom: 10px;
+}
+
+.control-button {
+    width: 60px;
+    height: 60px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px #3e8e41;
+    margin: 0 5px;
+}
+
+.control-button:active {
+    box-shadow: 0 2px #666;
+    transform: translateY(2px);
+}
+
+
 @media (max-width: 400px) {
     canvas {
         width: 100%;

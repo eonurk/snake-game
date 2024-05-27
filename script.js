@@ -106,12 +106,7 @@ async function moveSnake() {
     if (collision(newHead, snake)) {
         clearInterval(game);
         document.getElementById("finalScore").innerText = score;
-        const currentPlayerScore = await saveScore(score); // Save the score and get the player/score object
-        if (currentPlayerScore) {
-            displayHighScores(currentPlayerScore); // Display high scores and highlight current player's score
-        } else {
-            displayHighScores();
-        }
+        await checkAndSaveScore(score); // Check if score qualifies for top 10
         document.getElementById("gameOverPopup").style.display = "flex";
     }
 
@@ -202,13 +197,7 @@ function startDecreasingTimeBar() {
         } else {
             clearInterval(game);
             clearInterval(timeBarInterval);
-            
-            const currentPlayerScore = await saveScore(score); // Save the score and get the player/score object
-            if (currentPlayerScore) {
-                displayHighScores(currentPlayerScore); // Display high scores and highlight current player's score
-            } else {
-                displayHighScores();
-            }
+            await checkAndSaveScore(score); // Check if score qualifies for top 10
             document.getElementById("finalScore").innerText = score;
             document.getElementById("gameOverPopup").style.display = "flex";
         }
@@ -235,6 +224,7 @@ async function saveScore(score) {
         return null;
     }
 }
+
 
 async function displayHighScores(currentPlayerScore = null) {
     const highScoresTable = document.getElementById("highScoresTable").getElementsByTagName('tbody')[0];
@@ -263,6 +253,25 @@ async function displayHighScores(currentPlayerScore = null) {
         alert(`Error fetching high scores: ${error.message}`);
     }
 }
+
+async function checkAndSaveScore(score) {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/api/scores`);
+        const highScores = response.data;
+        if (highScores.length < 10 || score > highScores[highScores.length - 1].score) {
+            const player = prompt("Enter your name:");
+            if (player) {
+                await saveScore(player, score);
+                displayHighScores({ player, score }); // Display high scores and highlight current player's score
+            }
+        } else {
+            displayHighScores();
+        }
+    } catch (error) {
+        console.error("Error fetching high scores:", error);
+    }
+}
+
 
 startGame();
 

@@ -194,11 +194,16 @@ button:hover {
 .control-row {
     display: flex;
     justify-content: center;
+    align-items: center;
     margin: 5px 0;
 }
 
-.control-row:nth-child(1) {
+#up {
     margin-bottom: 10px;
+}
+
+#down {
+    margin-top: 10px;
 }
 
 .control-button {
@@ -218,7 +223,6 @@ button:hover {
     box-shadow: 0 2px #666;
     transform: translateY(2px);
 }
-
 
 @media (max-width: 400px) {
     canvas {

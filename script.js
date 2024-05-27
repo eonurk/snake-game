@@ -256,7 +256,7 @@ function getDomain() {
 
 async function checkAndSaveScore(score) {
     try {
-        const allowedDomains = ["https://snake-game-git-main-eonurks-projects.vercel.app", "https://eonurk.github.io/snake-game/"];
+        const allowedDomains = ["https://snake-game-git-main-eonurks-projects.vercel.app", "https://eonurk.github.io"];
         const currentDomain = getDomain();
 
         // Proceed only if the current domain is in the allowed list

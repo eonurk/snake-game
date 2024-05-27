@@ -45,29 +45,40 @@ async function connectToDatabase() {
 }
 
 export default async function handler(req, res) {
-  // Run the middleware
-  await runMiddleware(req, res, cors);
+  try {
+    // Run the middleware
+    await runMiddleware(req, res, cors);
 
-  const db = await connectToDatabase();
-  const scoresCollection = db.collection('scores');
+    const db = await connectToDatabase();
+    const scoresCollection = db.collection('scores');
 
-  if (req.method === 'GET') {
-    try {
-      const scores = await scoresCollection.find().sort({ score: -1 }).limit(10).toArray();
-      res.status(200).json(scores);
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to fetch scores' });
+    if (req.method === 'GET') {
+      try {
+        const scores = await scoresCollection.find().sort({ score: -1 }).limit(10).toArray();
+        res.status(200).json(scores);
+      } catch (error) {
+        console.error('Error fetching scores:', error);
+        res.status(500).json({ error: 'Failed to fetch scores' });
+      }
+    } else if (req.method === 'POST') {
+      try {
+        const { player, score } = req.body;
+        if (!player || typeof score !== 'number') {
+          res.status(400).json({ error: 'Invalid input' });
+          return;
+        }
+        const newScore = { player, score, date: new Date() };
+        await scoresCollection.insertOne(newScore);
+        res.status(201).json(newScore);
+      } catch (error) {
+        console.error('Error saving score:', error);
+        res.status(500).json({ error: 'Failed to save score' });
+      }
+    } else {
+      res.status(405).end(); // Method Not Allowed
     }
-  } else if (req.method === 'POST') {
-    try {
-      const { player, score } = req.body;
-      const newScore = { player, score, date: new Date() };
-      await scoresCollection.insertOne(newScore);
-      res.status(201).json(newScore);
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to save score' });
-    }
-  } else {
-    res.status(405).end(); // Method Not Allowed
+  } catch (error) {
+    console.error('Error handling request:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 }

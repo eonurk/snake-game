@@ -213,12 +213,15 @@ function increaseTimeBar(time) {
     document.getElementById("timeBar").style.width = timeBarWidth + "%";
 }
 
+
+const API_BASE_URL = 'https://snake-game-git-main-eonurks-projects.vercel.app'; // Replace with your actual Vercel custom domain
+
 async function saveScore(score) {
     const player = prompt("Enter your name:");
     if (!player) return;
 
     try {
-        await axios.post('/api/scores', { player, score });
+        await axios.post(`${API_BASE_URL}/api/scores`, { player, score });
         return { player, score };
     } catch (error) {
         console.error("Error saving score:", error);
@@ -231,7 +234,7 @@ async function displayHighScores(currentPlayerScore = null) {
     highScoresTable.innerHTML = '';
 
     try {
-        const response = await axios.get('/api/scores');
+        const response = await axios.get(`${API_BASE_URL}/api/scores`);
         const highScores = response.data;
         highScores.forEach((score, index) => {
             const row = highScoresTable.insertRow();

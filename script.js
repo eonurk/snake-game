@@ -195,13 +195,20 @@ function shareScore() {
 function startDecreasingTimeBar() {
     const timeBar = document.getElementById("timeBar");
     if (timeBarInterval) clearInterval(timeBarInterval);  // Clear any existing interval
-    timeBarInterval = setInterval(() => {
+    timeBarInterval = setInterval(async () => {
         if (timeBarWidth > 0) {
             timeBarWidth -= 1;
             timeBar.style.width = timeBarWidth + "%";
         } else {
             clearInterval(game);
             clearInterval(timeBarInterval);
+            
+            const currentPlayerScore = await saveScore(score); // Save the score and get the player/score object
+            if (currentPlayerScore) {
+                displayHighScores(currentPlayerScore); // Display high scores and highlight current player's score
+            } else {
+                displayHighScores();
+            }
             document.getElementById("finalScore").innerText = score;
             document.getElementById("gameOverPopup").style.display = "flex";
         }

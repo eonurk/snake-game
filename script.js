@@ -77,7 +77,6 @@ function direction(event) {
     }
 }
 
-
 async function moveSnake() {
     let snakeX = snake[0].x;
     let snakeY = snake[0].y;
@@ -213,10 +212,7 @@ function increaseTimeBar(time) {
 
 const API_BASE_URL = 'https://snake-game-git-main-eonurks-projects.vercel.app'; // Replace with your actual Vercel custom domain
 
-async function saveScore(score) {
-    const player = prompt("Enter your name:");
-    if (!player) return;
-
+async function saveScore(player, score) {
     try {
         await axios.post(`${API_BASE_URL}/api/scores`, { player, score });
         return { player, score };
@@ -225,7 +221,6 @@ async function saveScore(score) {
         return null;
     }
 }
-
 
 async function displayHighScores(currentPlayerScore = null) {
     const highScoresTable = document.getElementById("highScoresTable").getElementsByTagName('tbody')[0];
@@ -255,8 +250,20 @@ async function displayHighScores(currentPlayerScore = null) {
     }
 }
 
+function getDomain() {
+    return window.location.hostname;
+}
+
 async function checkAndSaveScore(score) {
     try {
+        const allowedDomains = ["https://snake-game-git-main-eonurks-projects.vercel.app", "https://eonurk.github.io"];
+        const currentDomain = getDomain();
+
+        // Proceed only if the current domain is in the allowed list
+        if (!allowedDomains.includes(currentDomain)) {
+            return;
+        }
+
         const response = await axios.get(`${API_BASE_URL}/api/scores`);
         const highScores = response.data;
         if (highScores.length < 10 || score > highScores[highScores.length - 1].score) {
@@ -272,7 +279,6 @@ async function checkAndSaveScore(score) {
         console.error("Error fetching high scores:", error);
     }
 }
-
 
 startGame();
 

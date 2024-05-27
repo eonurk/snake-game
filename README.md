@@ -7,7 +7,8 @@ On the backend, we use Vercel along with MangoDB to make it a bit more interesti
 For me, the most important part was to make it a challenge for everyone.
 So, there is a global leaderboard! If you are the best player, YOU WILL BE REMEMBERED!
 
-But, it's a bit buggy.
+But, it's a bit buggy lol.
+
 ![Alt text](src/image.png)
 
 ## Features

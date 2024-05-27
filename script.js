@@ -107,6 +107,7 @@ async function moveSnake() {
         clearInterval(game);
         document.getElementById("finalScore").innerText = score;
         await checkAndSaveScore(score); // Check if score qualifies for top 10
+        clearInterval(timeBarInterval)
         document.getElementById("gameOverPopup").style.display = "flex";
     }
 

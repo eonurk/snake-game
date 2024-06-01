@@ -154,13 +154,6 @@ button:hover {
 
 /* Media query for mobile devices */
 @media (max-width: 480px) {
-    #controls {
-        grid-template-areas:
-            "up"
-            "left"
-            "down"
-            "right";
-    }
     .control-button {
         width: 50px; /* Adjust button size for smaller screens */
         height: 50px; /* Adjust button size for smaller screens */

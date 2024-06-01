@@ -100,7 +100,6 @@ button:hover {
         "left down right";
     grid-gap: 10px;
     justify-items: center; /* Center items horizontally */
-    align-items: center; /* Center items vertically */
 }
 
 #up {
@@ -135,6 +134,12 @@ button:hover {
     align-items: center; /* Center text vertically */
 }
 
+/* Ensure the button text is centered */
+.control-button span {
+    display: inline-block;
+    vertical-align: middle;
+}
+
 .control-button:hover {
     background-color: #45a049; /* Darker green on hover */
 }
@@ -157,6 +162,7 @@ button:hover {
             "left"
             "down"
             "right";
+        grid-gap: 5px;
     }
     .control-button {
         width: 50px; /* Adjust button size for smaller screens */
@@ -164,7 +170,6 @@ button:hover {
         font-size: 14px; /* Adjust font size for smaller screens */
     }
 }
-
 
 
 @media (max-width: 400px) {

@@ -87,7 +87,6 @@ button:hover {
     background-color: #00AA00;
     transition: width 0.1s linear;
 }
-
 #controls {
     position: absolute;
     bottom: 20px;
@@ -95,9 +94,10 @@ button:hover {
     transform: translateX(-50%);
     display: grid;
     grid-template-areas:
-        "up up up"
+        "up"
         "left down right";
     grid-gap: 10px;
+    justify-items: center; /* Center items horizontally */
 }
 
 #up {
@@ -125,14 +125,24 @@ button:hover {
     border-radius: 10px;
     font-size: 16px;
     cursor: pointer;
-    box-shadow: 0 4px #3e8e41;
-    margin: 0 5px;
+    box-shadow: 0 4px #3e8e41; /* Shadow to create 3D effect */
+    transition: all 0.1s ease-in-out; /* Smooth transition */
+}
+
+.control-button:hover {
+    background-color: #45a049; /* Darker green on hover */
 }
 
 .control-button:active {
-    box-shadow: 0 2px #666;
-    transform: translateY(2px);
+    box-shadow: 0 2px #666; /* Shadow on click */
+    transform: translateY(2px); /* Push down effect on click */
 }
+
+.control-button:focus {
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 10px #4CAF50; /* Glow effect on focus */
+}
+
 
 @media (max-width: 400px) {
     canvas {

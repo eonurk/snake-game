@@ -100,6 +100,7 @@ button:hover {
         "left down right";
     grid-gap: 10px;
     justify-items: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
 }
 
 #up {
@@ -117,6 +118,9 @@ button:hover {
 #right {
     grid-area: right;
 }
+.control-row{
+    display: flex;
+}
 
 .control-button {
     width: 60px;
@@ -128,16 +132,10 @@ button:hover {
     font-size: 16px;
     cursor: pointer;
     box-shadow: 0 4px #3e8e41; /* Shadow to create 3D effect */
-    transition: all 0.1s ease-in-out; /* Smooth transition */
+    transition: all 0.001s ease-in-out; /* Smooth transition */
     display: flex; /* Use flexbox for centering text */
     justify-content: center; /* Center text horizontally */
     align-items: center; /* Center text vertically */
-}
-
-/* Ensure the button text is centered */
-.control-button span {
-    display: inline-block;
-    vertical-align: middle;
 }
 
 .control-button:hover {
@@ -162,7 +160,6 @@ button:hover {
             "left"
             "down"
             "right";
-        grid-gap: 5px;
     }
     .control-button {
         width: 50px; /* Adjust button size for smaller screens */
@@ -170,6 +167,7 @@ button:hover {
         font-size: 14px; /* Adjust font size for smaller screens */
     }
 }
+
 
 
 @media (max-width: 400px) {

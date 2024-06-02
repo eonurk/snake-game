@@ -121,6 +121,11 @@ async function moveSnake() {
             break;
     }
 
+    if (snakeX < 0) snakeX = canvas.width - box;
+    if (snakeX >= canvas.width) snakeX = 0;
+    if (snakeY < 0) snakeY = canvas.height - box;
+    if (snakeY >= canvas.height) snakeY = 0;
+
     if (snakeX === food.x && snakeY === food.y) {
         score += food.points;
         increaseTimeBar(food.time);
@@ -128,11 +133,6 @@ async function moveSnake() {
     } else {
         snake.pop();
     }
-
-    if (snakeX < 0) snakeX = canvas.width - box;
-    if (snakeX >= canvas.width) snakeX = 0;
-    if (snakeY < 0) snakeY = canvas.height - box;
-    if (snakeY >= canvas.height) snakeY = 0;
 
     const newHead = { x: snakeX, y: snakeY };
 
